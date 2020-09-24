@@ -5,7 +5,7 @@ import axios from '../../../axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 
-function createFormElements(elType, type, placeholder, value) {
+function createFormElements(elType, type, placeholder, value, validation, isValid) {
     return {
         elementType: elType,
         elementConfig: {
@@ -14,20 +14,37 @@ function createFormElements(elType, type, placeholder, value) {
         },
         value: value,
         validation: {
-            required: true
-        }
+            required: validation,
+        },
+        valid: isValid,
+        touched: false
     }
 }
 
 class ContactData extends Component {
 
+    
+
     state = {
         orderForm: {
-            name: createFormElements('input', 'text', 'Your Name', ''),
-            street: createFormElements('input', 'text', 'Your Street', ''),
-            zipCode: createFormElements('input', 'text', 'Your ZIP Code', ''),
-            country: createFormElements('input', 'text', 'Your Country', ''),
-            email: createFormElements('input', 'email', 'Your E-mail', ''),
+            name: createFormElements('input', 'text', 'Your Name', '', true, false),
+            street: createFormElements('input', 'text', 'Your Street', '', true, false),
+            zipCode: {
+                elementType: 'input',
+                elementConfig: {
+                    type: 'text',
+                    placeholder: 'Your ZIP Code'
+                },
+                value: '',
+                validation: {
+                    required: true,
+                    length: 5
+                },
+                valid: false,
+                touched: false
+            },
+            country: createFormElements('input', 'text', 'Your Country', '', true, false),
+            email: createFormElements('input', 'email', 'Your E-mail', '', true, false),
             deliveryMethod: {
                 elementType: 'select',
                 elementConfig: {
@@ -36,10 +53,29 @@ class ContactData extends Component {
                         { value: 'cheapest', displayValue: 'Cheapest' }
                     ]
                 },
-                value: ''
+                value: '',
+                validation: {},
+                valid: true,
+                touched: false
             },
         },
+        formIsValid: false,
         loading: false,
+    }
+
+    chackValidity(value, rules) {
+
+        let isValid = true;
+
+        if(rules.required) {
+            isValid = value.trim() !== '' && isValid;
+        }
+
+        if(rules.length) {
+            isValid = value.length === rules.length && isValid;
+        }
+
+        return isValid;
     }
 
     orderHandler = (e) => {
@@ -76,8 +112,15 @@ class ContactData extends Component {
         const updatedFormElement = {...updatedForm[id]};
 
         updatedFormElement.value = e.target.value;
+        updatedFormElement.valid = this.chackValidity(updatedFormElement.value, updatedFormElement.validation);
+        updatedFormElement.touched = true;
         updatedForm[id] = updatedFormElement;
-        this.setState({orderForm: updatedForm});
+
+        let formIsValid = true;
+        for (let inputId in updatedForm) {
+            formIsValid = updatedForm[inputId].valid && formIsValid;
+        }
+        this.setState({orderForm: updatedForm, formIsValid: formIsValid});
     }
 
     render() {
@@ -98,9 +141,12 @@ class ContactData extends Component {
                         elementConfig={el.config.elementConfig}
                         value={el.config.value}
                         key={el.id}
+                        invalid={!el.config.valid}
+                        shouldValidate={el.config.validation}
+                        touched={el.config.touched}
                         changed={(e) => this.inputChangedHandler(e, el.id)} />
                 ))}
-                <Button btnType="Success" clicked={this.orderHandler}>ORDER</Button>
+                <Button btnType="Success" disabled={!this.state.formIsValid} clicked={this.orderHandler}>ORDER</Button>
             </form>);
         if (this.state.loading) {
             form = <Spinner />

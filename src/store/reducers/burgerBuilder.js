@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
+import { updateObject } from '../utillity';
 
 const initialState = {
     ingredients: null,
@@ -17,28 +18,31 @@ const ingredientsReducer = (state = initialState, action) => {
 
     switch (action.type) {
         case (actionTypes.ADD_INGREDIENT):
-            return {
-                ...state,
-                ingredients: {
-                    ...state.ingredients,
-                    [action.ingredientName]: state.ingredients[action.ingredientName] + 1
-                },
+            const newIngredient = {
+                [action.ingredientName]: state.ingredients[action.ingredientName] + 1
+            }
+            const updatedIngredients = updateObject(state.ingredients, newIngredient);
+            const newState = {
+                ingredients: updatedIngredients,
                 price: state.price + INGREDIENT_PRICES[action.ingredientName]
-            };
+            }
+            return updateObject(state, newState);
         case (actionTypes.REMOVE_INGREDIENT):
-            return {
-                ...state,
-                ingredients: {
-                    ...state.ingredients,
-                    [action.ingredientName]: state.ingredients[action.ingredientName] - 1
-                },
-                price: state.price - INGREDIENT_PRICES[action.ingredientName]
-            };
+            const newIngredients = {
+                [action.ingredientName]: state.ingredients[action.ingredientName] - 1
+            }
+            const updatedIngredient = updateObject(state.ingredients, newIngredients);
+            const newStates = {
+                ingredients: updatedIngredient,
+                price: state.price + INGREDIENT_PRICES[action.ingredientName]
+            }
+            return updateObject(state, newStates);
         case (actionTypes.SET_INGREDIENTS):
             return {
                 ...state,
                 ingredients: action.ingredients,
-                error: false
+                error: false,
+                price: 4
             };
         case (actionTypes.FETCH_INGREDIENTD_FAILED):
             return {

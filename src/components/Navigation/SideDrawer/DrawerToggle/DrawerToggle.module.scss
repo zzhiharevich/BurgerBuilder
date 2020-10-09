@@ -1,3 +1,5 @@
+@import '../../../../styles/mixins.module';
+
 .DrawerToggle {
     width: 40px;
     height: 100%;
@@ -8,16 +10,18 @@
     padding: 10px 0;
     box-sizing: border-box;
     cursor: pointer;
-}
 
-.DrawerToggle div {
-    width: 90%;
+    & div {
+        width: 90%;
     height: 3px;
     background-color: white;
-}
+    }
 
-@media (min-width: 500px) {
-    .DrawerToggle {
+    // @media (min-width: 500px) {
+    //         display: none;
+    // }
+
+    @include media-mobile {
         display: none;
     }
 }

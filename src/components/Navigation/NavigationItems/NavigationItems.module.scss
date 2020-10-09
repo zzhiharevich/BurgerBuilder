@@ -1,3 +1,5 @@
+@import '../../../styles/mixins.module';
+
 .NavigationItems {
     margin: 0;
     padding: 0;
@@ -6,10 +8,12 @@
     align-items: center;
     height: 100%;
     flex-flow: column;
-}
 
-@media (min-width: 500px) {
-    .NavigationItems {
+    // @media (min-width: 500px) {
+    //         flex-flow: row;
+    // }
+
+    @include media-mobile {
         flex-flow: row;
     }
 }

@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import burgerBuilderReducer from './store/reducers/burgerBuilder';
 import orderReducer from './store/reducers/order';
-import './index.css';
+import './index.module.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 

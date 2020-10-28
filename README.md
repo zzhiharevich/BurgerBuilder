@@ -1,6 +1,6 @@
 # Burger Builder
 
-Burger Builder is a web-site where user can create a burger  and order it. 
+Burger Builder is a web-site where user can create a burger  and order it.<br/>
 Web-site allows to look through the orders we already have.
 
 ## Frameworks and Libraries I used:
@@ -9,5 +9,5 @@ Web-site allows to look through the orders we already have.
 * Redux
 
 ## To run project
-npm install 
-npm start
+* npm install 
+* npm start

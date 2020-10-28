@@ -1,7 +1,7 @@
 # Burger Builder
 
 Burger Builder is a web-site where user can create a burger  and order it.<br/>
-Web-site allows to look through the orders we already have.
+Web-site allows to look through the orders user already have.
 
 ## Frameworks and Libraries I used:
 * React.js
